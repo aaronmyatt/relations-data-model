@@ -3,39 +3,32 @@ import "./style.css";
 
 import { db, Contact, Encounter } from "./database";
 
-db.contacts.clear();
-db.encounters.clear();
-
-(async () => {
+db.transaction("rw", db.contacts, db.encounters, async () => {
+  await db.contacts.clear();
+  await db.encounters.clear();
   await Contact.generateMock();
   await Contact.generateMock();
-  // Write TypeScript code!
-  const appDiv: HTMLElement = document.getElementById("contacts");
-  await db.contacts
-    .each(contact => {
-      const div = document.createElement("div");
-      div.innerText = `${contact.id} | ${contact.email}`;
-      appDiv.appendChild(div);
-    })
-    .catch(e => {
-      console.log(e);
-    });
 
-  (async () => {
-    const contact = await db.contacts.toCollection().first();
-    await db.encounters.add(
-      new Encounter(contact.id, "something went down", "phone", new Date())
-    );
+  const contact = await db.contacts.toCollection().first();
+  Encounter.generateMock(contact);
+})
+  .then(renderContacts)
+  .then(renderEncounters);
 
-    const appDiv: HTMLElement = document.getElementById("encounters");
-    db.encounters
-      .each(encounter => {
-        const div = document.createElement("div");
-        div.innerText = `${encounter.contactId} | ${encounter.details}`;
-        appDiv.appendChild(div);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  })();
-})();
+function renderContacts() {
+  const contactsDiv: HTMLElement = document.getElementById("contacts");
+  return db.contacts.each(contact => {
+    const div = document.createElement("div");
+    div.innerText = `${contact.id} | ${contact.email}`;
+    contactsDiv.appendChild(div);
+  });
+}
+
+function renderEncounters() {
+  const encountersDiv: HTMLElement = document.getElementById("encounters");
+  db.encounters.each(encounter => {
+    const div = document.createElement("div");
+    div.innerText = `${encounter.contactId} | ${encounter.details}`;
+    encountersDiv.appendChild(div);
+  });
+}

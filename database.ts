@@ -80,6 +80,16 @@ export class Encounter {
     this.when = when;
     if (id) this.id = id;
   }
+
+  public static async generateMock(contact: Contact) {
+    const encounter = new Encounter(
+      contact.id,
+      `something worth remembering happened between ${contact.firstName} and I`,
+      "phone",
+      new Date()
+    );
+    db.encounters.add(encounter);
+  }
 }
 export class Plan {
   id: number;
