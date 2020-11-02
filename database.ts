@@ -47,7 +47,6 @@ export class Contact {
 
   public static async generateMock() {
     const lastContact = await db.contacts.toCollection().last();
-    console.log("last ", lastContact);
     const lastContactId = lastContact ? lastContact.id : 0;
     const contact = new Contact(
       `test${lastContactId + 1}`,
@@ -110,6 +109,11 @@ export class Plan {
     this.sooner = sooner;
     this.later = later;
     if (id) this.id = id;
+  }
+
+  public static async generateMock(contact: Contact) {
+    const plan = new Plan(contact.id, new Date(), true, false);
+    db.plans.add(plan);
   }
 }
 
