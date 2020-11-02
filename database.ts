@@ -1,9 +1,9 @@
 import Dexie from "dexie";
 
 class RelationsDatabase extends Dexie {
-  contacts: Dexie.Table<IContact, number>;
-  encounters: Dexie.Table<IEncounter, number>;
-  plans: Dexie.Table<IPlan, number>;
+  contacts: Dexie.Table<Contact, number>;
+  encounters: Dexie.Table<Encounter, number>;
+  plans: Dexie.Table<Plan, number>;
 
   constructor() {
     super("relations");
@@ -16,37 +16,12 @@ class RelationsDatabase extends Dexie {
     });
 
     db.contacts.mapToClass(Contact);
-    db.encounters = this.table("encounters");
-    db.plans = this.table("plans");
+    db.encounters.mapToClass(Encounter);
+    db.plans.mapToClass(Plan);
   }
 }
 
-export interface IContact {
-  id?: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  telephone: string;
-  birthday?: Date;
-}
-
-export interface IEncounter {
-  id: number;
-  contactId: number;
-  details: string;
-  how: string;
-  when: Date;
-}
-
-export interface IPlan {
-  id: number;
-  contactId: number;
-  when: Date;
-  sooner: boolean;
-  later: boolean;
-}
-
-export class Contact implements IContact {
+export class Contact {
   id: number;
   firstName: string;
   lastName: string;
@@ -85,7 +60,7 @@ export class Contact implements IContact {
   }
 }
 
-export class Encounter implements IEncounter {
+export class Encounter {
   id: number;
   contactId: number;
   details: string;
@@ -106,7 +81,7 @@ export class Encounter implements IEncounter {
     if (id) this.id = id;
   }
 }
-export class Plan implements IPlan {
+export class Plan {
   id: number;
   contactId: number;
   when: Date;
