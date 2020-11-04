@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 
-class RelationsDatabase extends Dexie {
+export class Database extends Dexie {
   contacts: Dexie.Table<Contact, number>;
   encounters: Dexie.Table<Encounter, number>;
   plans: Dexie.Table<Plan, number>;
@@ -45,7 +45,7 @@ export class Contact {
     if (id) this.id = id;
   }
 
-  public static async generateMock() {
+  public static async generateMock(): Promise<void> {
     const lastContact = await db.contacts.toCollection().last();
     const lastContactId = lastContact ? lastContact.id : 0;
     const contact = new Contact(
@@ -56,6 +56,10 @@ export class Contact {
       new Date()
     );
     db.contacts.add(contact);
+  }
+
+  public static toString() {
+    return "contacts";
   }
 }
 
@@ -80,7 +84,7 @@ export class Encounter {
     if (id) this.id = id;
   }
 
-  public static async generateMock(contact: Contact) {
+  public static async generateMock(contact: Contact): Promise<void> {
     const encounter = new Encounter(
       contact.id,
       `something worth remembering happened between ${contact.firstName} and I`,
@@ -88,6 +92,10 @@ export class Encounter {
       new Date()
     );
     db.encounters.add(encounter);
+  }
+
+  public static toString() {
+    return "encounters";
   }
 }
 export class Plan {
@@ -111,10 +119,14 @@ export class Plan {
     if (id) this.id = id;
   }
 
-  public static async generateMock(contact: Contact) {
+  public static async generateMock(contact: Contact): Promise<void> {
     const plan = new Plan(contact.id, new Date(), true, false);
     db.plans.add(plan);
   }
+
+  public static toString() {
+    return "plans";
+  }
 }
 
-export var db = new RelationsDatabase();
+export var db = new Database();

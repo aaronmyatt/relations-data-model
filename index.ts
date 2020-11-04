@@ -2,6 +2,11 @@
 import "./style.css";
 
 import { db, Contact, Encounter, Plan } from "./database";
+import { ContactService, EncounterService, PlanService } from "./services";
+
+const contactService = new ContactService();
+const encounterService = new EncounterService();
+const planService = new PlanService();
 
 db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   await db.contacts.clear();
@@ -17,29 +22,33 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
 })
   .then(renderContacts)
   .then(renderEncounters)
-  .then(renderPlans);
+  .then(renderPlans)
+  .catch(e => console.log(e.message));
 
-function renderContacts() {
+async function renderContacts(): Promise<void> {
   const contactsDiv: HTMLElement = document.getElementById("contacts");
-  return db.contacts.each(contact => {
+  const allContacts = await contactService.fetchAll();
+  allContacts.forEach(contact => {
     const div = document.createElement("div");
     div.innerText = `${contact.id} | ${contact.email}`;
     contactsDiv.appendChild(div);
   });
 }
 
-function renderEncounters() {
+async function renderEncounters() {
   const encountersDiv: HTMLElement = document.getElementById("encounters");
-  db.encounters.each(encounter => {
+  const allEncountes = await encounterService.fetchAll();
+  allEncountes.forEach(encounter => {
     const div = document.createElement("div");
     div.innerText = `${encounter.contactId} | ${encounter.details}`;
     encountersDiv.appendChild(div);
   });
 }
 
-function renderPlans() {
+async function renderPlans() {
   const plansDiv: HTMLElement = document.getElementById("plans");
-  db.plans.each(plan => {
+  const allPlans = await planService.fetchAll();
+  allPlans.forEach(plan => {
     const div = document.createElement("div");
     div.innerText = `${plan.contactId} | ${plan.when}`;
     plansDiv.appendChild(div);
