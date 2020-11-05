@@ -57,10 +57,6 @@ export class Contact {
     );
     db.contacts.add(contact);
   }
-
-  public static toString() {
-    return "contacts";
-  }
 }
 
 export class Encounter {
@@ -93,10 +89,6 @@ export class Encounter {
     );
     db.encounters.add(encounter);
   }
-
-  public static toString() {
-    return "encounters";
-  }
 }
 export class Plan {
   id: number;
@@ -122,10 +114,6 @@ export class Plan {
   public static async generateMock(contact: Contact): Promise<void> {
     const plan = new Plan(contact.id, new Date(), true, false);
     db.plans.add(plan);
-  }
-
-  public static toString() {
-    return "plans";
   }
 }
 
