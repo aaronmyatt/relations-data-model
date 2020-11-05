@@ -5,5 +5,5 @@
   "dependencies": {
     "dexie": "^3.0.2"
   },
-  "main": "entry.js"
+  "main": "main.js"
 }
