@@ -5,5 +5,6 @@
   "dependencies": {
     "dexie": "^3.0.2"
   },
-  "main": "main.js"
+  "main": "main.js",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }
