@@ -9,10 +9,6 @@ const encounterService = new EncounterService();
 const planService = new PlanService();
 
 db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
-  await db.contacts.clear();
-  await db.encounters.clear();
-  await db.plans.clear();
-
   await Contact.generateMock();
   await Contact.generateMock();
 
