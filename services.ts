@@ -9,13 +9,16 @@ class Service<T> {
   }
 
   public async fetchOne(id: number): Promise<T> {
-    const entity = await this.connection[this.tableName].get(id);
+    const entity = await this.table.get(id);
     return entity;
   }
 
   public async fetchAll(): Promise<T[]> {
-    const entities = await this.connection[this.tableName].toArray();
+    const entities = await this.table.toArray();
     return entities;
+  }
+  get table(): Dexie.Table<T, number> {
+    return this.connection[this.tableName];
   }
 }
 
@@ -24,7 +27,21 @@ export class ContactService extends Service<Contact> {
 }
 export class EncounterService extends Service<Encounter> {
   tableName = "encounters";
+
+  public async fetchFor(contact: Contact): Promise<Encounter[]> {
+    return this.table
+      .where("contactId")
+      .equals(contact.id)
+      .toArray();
+  }
 }
 export class PlanService extends Service<Plan> {
   tableName = "plans";
+
+  public async fetchFor(contact: Contact): Promise<Plan[]> {
+    return this.table
+      .where("contactId")
+      .equals(contact.id)
+      .toArray();
+  }
 }

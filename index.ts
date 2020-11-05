@@ -13,7 +13,9 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   await Contact.generateMock();
 
   const contact = await db.contacts.toCollection().first();
+  const contact2 = await db.contacts.toCollection().last();
   Encounter.generateMock(contact);
+  Encounter.generateMock(contact2);
   Plan.generateMock(contact);
 })
   .then(renderContacts)
@@ -22,32 +24,48 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   .then(() => db.delete())
   .catch(e => console.log(e.message));
 
-async function renderContacts(): Promise<void> {
+async function renderContacts(): Promise<Contact[]> {
   const contactsDiv: HTMLElement = document.getElementById("contacts");
-  const allContacts = await contactService.fetchAll();
-  allContacts.forEach(contact => {
+  const contacts = await contactService.fetchAll();
+  contacts.forEach(contact => {
     const div = document.createElement("div");
     div.innerText = `${contact.id} | ${contact.email}`;
     contactsDiv.appendChild(div);
   });
+  return contacts;
 }
 
-async function renderEncounters() {
+async function renderEncounters(contacts: Contact[]) {
   const encountersDiv: HTMLElement = document.getElementById("encounters");
-  const allEncountes = await encounterService.fetchAll();
-  allEncountes.forEach(encounter => {
-    const div = document.createElement("div");
-    div.innerText = `${encounter.contactId} | ${encounter.details}`;
-    encountersDiv.appendChild(div);
+
+  contacts.forEach(async contact => {
+    try {
+      const encounters = await encounterService.fetchFor(contact);
+      encounters.forEach(encounter => {
+        const div = document.createElement("div");
+        div.innerText = `${encounter.contactId} | ${encounter.details}`;
+        encountersDiv.appendChild(div);
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
   });
+  return contacts;
 }
 
-async function renderPlans() {
+function renderPlans(contacts: Contact[]) {
   const plansDiv: HTMLElement = document.getElementById("plans");
-  const allPlans = await planService.fetchAll();
-  allPlans.forEach(plan => {
-    const div = document.createElement("div");
-    div.innerText = `${plan.contactId} | ${plan.when}`;
-    plansDiv.appendChild(div);
+
+  contacts.forEach(async contact => {
+    try {
+      const plans = await planService.fetchFor(contact);
+      plans.forEach(plan => {
+        const div = document.createElement("div");
+        div.innerText = `${plan.contactId} | ${plan.when}`;
+        plansDiv.appendChild(div);
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
   });
 }
