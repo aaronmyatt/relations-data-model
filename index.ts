@@ -23,6 +23,7 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   .then(renderContacts)
   .then(renderEncounters)
   .then(renderPlans)
+  .then(() => db.delete())
   .catch(e => console.log(e.message));
 
 async function renderContacts(): Promise<void> {
