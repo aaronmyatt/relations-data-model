@@ -1,5 +1,5 @@
 {
-  "name": "typescript",
+  "name": "relations-data-model",
   "version": "0.0.1",
   "dependencies": {
     "dexie": "^3.0.2"
