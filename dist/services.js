@@ -11,6 +11,12 @@ class Service {
         const entities = await this.table.toArray();
         return entities;
     }
+    async addOne(entity) {
+        return this.table.add(entity);
+    }
+    async updateOne(entity) {
+        return this.table.put(entity);
+    }
     get table() {
         return this.connection[this.tableName];
     }
