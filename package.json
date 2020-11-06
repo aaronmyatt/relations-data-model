@@ -1,9 +1,11 @@
 {
   "name": "@aaronmyatt/relations-data-model",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "dexie": "^3.0.2"
   },
   "main": "main.js",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
