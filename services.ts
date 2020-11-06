@@ -17,6 +17,15 @@ class Service<T> {
     const entities = await this.table.toArray();
     return entities;
   }
+
+  public async addOne(entity: T): Promise<number> {
+    return this.table.add(entity);
+  }
+
+  public async updateOne(entity: T): Promise<number> {
+    return this.table.put(entity);
+  }
+
   get table(): Dexie.Table<T, number> {
     return this.connection[this.tableName];
   }
