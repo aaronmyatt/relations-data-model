@@ -114,6 +114,12 @@ export class Plan {
     if (id) this.id = id;
   }
 
+  // TODO: make first plan for contact
+  // public makePlan(){}
+
+  // TODO: make subsequent plans
+  // public makeNextPlan(contact: Contact, soonerOrLater: boolan){}
+
   public static async generateMock(contact: Contact): Promise<void> {
     const plan = new Plan(contact.id, new Date(), true, false);
     db.plans.add(plan);
