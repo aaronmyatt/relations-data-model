@@ -57,6 +57,9 @@ export class Contact {
     );
     db.contacts.add(contact);
   }
+
+  // TODO: implement this
+  // public fullName(): string {}
 }
 
 export class Encounter {

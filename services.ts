@@ -14,6 +14,7 @@ class Service<T> {
   }
 
   public async fetchAll(): Promise<T[]> {
+    // TODO: make sortable
     const entities = await this.table.toArray();
     return entities;
   }
