@@ -15,7 +15,7 @@ class Service<T> {
 
   public async fetchAll(): Promise<T[]> {
     // TODO: make sortable
-    const entities = await this.table.toArray();
+    const entities = await this.table.reverse().toArray();
     return entities;
   }
 
@@ -35,6 +35,7 @@ class Service<T> {
 export class ContactService extends Service<Contact> {
   tableName = "contacts";
 }
+
 export class EncounterService extends Service<Encounter> {
   tableName = "encounters";
 
@@ -45,6 +46,7 @@ export class EncounterService extends Service<Encounter> {
       .toArray();
   }
 }
+
 export class PlanService extends Service<Plan> {
   tableName = "plans";
 
