@@ -56,4 +56,10 @@ export class PlanService extends Service<Plan> {
       .equals(contact.id)
       .toArray();
   }
+
+  // TODO: enable querying for plan on date
+  // fetchForDate(date: Date){}
+
+  // TODO: check if
+  // schedulingConflict(date1: Date, date2: Date){}
 }
