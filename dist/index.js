@@ -10,7 +10,7 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
     await Contact.generateMock();
     const contact = await db.contacts.toCollection().first();
     const contact2 = await db.contacts.toCollection().last();
-    Encounter.generateMock(contact);
+    await Encounter.generateMock(contact);
     Encounter.generateMock(contact2);
     Plan.generateMock(contact);
 })

@@ -1,20 +1,22 @@
 import { db } from "./database";
+import { zeroOutDate } from "./utils";
 class Service {
     constructor(connection = db) {
         this.connection = connection;
     }
-    async fetchOne(id) {
-        const entity = await this.table.get(id);
+    fetchOne(id) {
+        const entity = this.table.get(id);
         return entity;
     }
-    async fetchAll() {
-        const entities = await this.table.toArray();
+    fetchAll() {
+        // TODO: make sortable
+        const entities = this.table.reverse().toArray();
         return entities;
     }
-    async addOne(entity) {
+    addOne(entity) {
         return this.table.add(entity);
     }
-    async updateOne(entity) {
+    updateOne(entity) {
         return this.table.put(entity);
     }
     get table() {
@@ -32,7 +34,7 @@ export class EncounterService extends Service {
         super(...arguments);
         this.tableName = "encounters";
     }
-    async fetchFor(contact) {
+    fetchFor(contact) {
         return this.table
             .where("contactId")
             .equals(contact.id)
@@ -44,10 +46,31 @@ export class PlanService extends Service {
         super(...arguments);
         this.tableName = "plans";
     }
-    async fetchFor(contact) {
+    fetchFor(contact) {
         return this.table
             .where("contactId")
             .equals(contact.id)
+            .toArray();
+    }
+    fetchFutureFor(contact) {
+        return this.table
+            .where("contactId")
+            .equals(contact.id)
+            .filter(plan => {
+            return plan.when > new Date();
+        })
+            .toArray();
+    }
+    fetchForDate(date) {
+        return this.table
+            .where("when")
+            .equals(zeroOutDate(date))
+            .first();
+    }
+    fetchAllForDate(date) {
+        return this.table
+            .where("when")
+            .equals(zeroOutDate(date))
             .toArray();
     }
 }

@@ -1,4 +1,5 @@
 import Dexie from "dexie";
+import { zeroOutDate } from "./utils";
 export class Database extends Dexie {
     constructor() {
         super("relations");
@@ -24,6 +25,12 @@ export class Contact {
         if (id)
             this.id = id;
     }
+    set birthday(birthday) {
+        this._birthday = zeroOutDate(birthday);
+    }
+    get birthday() {
+        return this._birthday;
+    }
     static async generateMock() {
         const lastContact = await db.contacts.toCollection().last();
         const lastContactId = lastContact ? lastContact.id : 0;
@@ -40,6 +47,12 @@ export class Encounter {
         if (id)
             this.id = id;
     }
+    set when(date) {
+        this._when = zeroOutDate(date);
+    }
+    get when() {
+        return this._when;
+    }
     static async generateMock(contact) {
         const encounter = new Encounter(contact.id, `something worth remembering happened between ${contact.firstName} and I`, "phone", new Date());
         db.encounters.add(encounter);
@@ -54,6 +67,16 @@ export class Plan {
         if (id)
             this.id = id;
     }
+    set when(date) {
+        this._when = zeroOutDate(date);
+    }
+    get when() {
+        return this._when;
+    }
+    // TODO: make first plan for contact
+    // public makePlan(){}
+    // TODO: make subsequent plans
+    // public makeNextPlan(contact: Contact, soonerOrLater: boolan){}
     static async generateMock(contact) {
         const plan = new Plan(contact.id, new Date(), true, false);
         db.plans.add(plan);
