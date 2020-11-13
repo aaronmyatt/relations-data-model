@@ -68,7 +68,9 @@ export class Contact {
   }
 
   // TODO: implement this
-  // public fullName(): string {}
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }
 
 export class Encounter {
