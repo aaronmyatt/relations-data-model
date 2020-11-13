@@ -1,4 +1,5 @@
 import Dexie from "dexie";
+import { zeroOutDate } from "./utils";
 
 export class Database extends Dexie {
   contacts: Dexie.Table<Contact, number>;
@@ -27,7 +28,7 @@ export class Contact {
   lastName: string;
   email: string;
   telephone: string;
-  birthday: Date;
+  _birthday: Date;
 
   constructor(
     firstName: string,
@@ -43,6 +44,14 @@ export class Contact {
     this.telephone = telephone;
     if (birthday) this.birthday = birthday;
     if (id) this.id = id;
+  }
+
+  set birthday(birthday: Date) {
+    this._birthday = zeroOutDate(birthday);
+  }
+
+  get birthday(): Date {
+    return this._birthday;
   }
 
   public static async generateMock(): Promise<void> {
@@ -67,7 +76,7 @@ export class Encounter {
   contactId: number;
   details: string;
   how: string;
-  when: Date;
+  _when: Date;
 
   constructor(
     contactId: number,
@@ -83,6 +92,14 @@ export class Encounter {
     if (id) this.id = id;
   }
 
+  set when(date: Date) {
+    this._when = zeroOutDate(date);
+  }
+
+  get when(): Date {
+    return this._when;
+  }
+
   public static async generateMock(contact: Contact): Promise<void> {
     const encounter = new Encounter(
       contact.id,
@@ -96,7 +113,7 @@ export class Encounter {
 export class Plan {
   id: number;
   contactId: number;
-  when: Date;
+  _when: Date;
   sooner: boolean;
   later: boolean;
 
@@ -112,6 +129,14 @@ export class Plan {
     this.sooner = sooner;
     this.later = later;
     if (id) this.id = id;
+  }
+
+  set when(date: Date) {
+    this._when = zeroOutDate(date);
+  }
+
+  get when(): Date {
+    return this._when;
   }
 
   // TODO: make first plan for contact
