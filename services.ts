@@ -30,6 +30,11 @@ class Service<T> {
   get table(): Dexie.Table<T, number> {
     return this.connection[this.tableName];
   }
+
+  // Implement pagination query
+  // public async paginate(offset: number, limit: number): Promise<T[]>{
+  //   // https://github.com/dfahlander/Dexie.js/issues/411
+  // }
 }
 
 export class ContactService extends Service<Contact> {
@@ -54,6 +59,16 @@ export class PlanService extends Service<Plan> {
     return this.table
       .where("contactId")
       .equals(contact.id)
+      .toArray();
+  }
+
+  public async fetchFutureFor(contact: Contact): Promise<Plan[]> {
+    return this.table
+      .where("contactId")
+      .equals(contact.id)
+      .filter(plan => {
+        return plan.when > new Date();
+      })
       .toArray();
   }
 
