@@ -9,8 +9,7 @@ class Service {
         return entity;
     }
     fetchAll() {
-        // TODO: make sortable
-        const entities = this.table.reverse().toArray();
+        const entities = this.table.reverse();
         return entities;
     }
     addOne(entity) {
@@ -38,7 +37,7 @@ export class EncounterService extends Service {
         return this.table
             .where("contactId")
             .equals(contact.id)
-            .toArray();
+            .reverse();
     }
 }
 export class PlanService extends Service {
@@ -50,7 +49,7 @@ export class PlanService extends Service {
         return this.table
             .where("contactId")
             .equals(contact.id)
-            .toArray();
+            .reverse();
     }
     fetchFutureFor(contact) {
         return this.table
@@ -59,7 +58,7 @@ export class PlanService extends Service {
             .filter(plan => {
             return plan._when > new Date();
         })
-            .toArray();
+            .reverse();
     }
     fetchLastFor(contact) {
         return this.table
@@ -77,6 +76,6 @@ export class PlanService extends Service {
         return this.table
             .where("when")
             .equals(zeroOutDate(date))
-            .toArray();
+            .reverse();
     }
 }
