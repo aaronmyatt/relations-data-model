@@ -57,7 +57,7 @@ export class PlanService extends Service {
             .where("contactId")
             .equals(contact.id)
             .filter(plan => {
-            return plan.when > new Date();
+            return plan._when > new Date();
         })
             .toArray();
     }
