@@ -26,7 +26,7 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
 
 async function renderContacts(): Promise<Contact[]> {
   const contactsDiv: HTMLElement = document.getElementById("contacts");
-  const contacts = await contactService.fetchAll();
+  const contacts = await contactService.fetchAll().toArray();
   contacts.forEach(contact => {
     const div = document.createElement("div");
     div.innerText = `${contact.id} | ${contact.fullName}`;
@@ -40,7 +40,7 @@ async function renderEncounters(contacts: Contact[]) {
 
   contacts.forEach(async contact => {
     try {
-      const encounters = await encounterService.fetchFor(contact);
+      const encounters = await encounterService.fetchFor(contact).toArray();
       encounters.forEach(encounter => {
         const div = document.createElement("div");
         div.innerText = `${encounter.contactId} | ${encounter.details}`;
@@ -58,7 +58,7 @@ function renderPlans(contacts: Contact[]) {
 
   contacts.forEach(async contact => {
     try {
-      const plans = await planService.fetchFor(contact);
+      const plans = await planService.fetchFor(contact).toArray();
       plans.forEach(plan => {
         const div = document.createElement("div");
         div.innerText = `${plan.contactId} | ${plan.when}`;

@@ -1,5 +1,6 @@
 import { Database, db, Contact, Encounter, Plan } from "./database";
 import { zeroOutDate } from "./utils";
+import { Collection } from "dexie";
 
 class Service<T> {
   connection: Database;
@@ -14,9 +15,8 @@ class Service<T> {
     return entity;
   }
 
-  public fetchAll(): Promise<T[]> {
-    // TODO: make sortable
-    const entities = this.table.reverse().toArray();
+  public fetchAll(): Collection<T, number> {
+    const entities = this.table.reverse();
     return entities;
   }
 
@@ -45,32 +45,32 @@ export class ContactService extends Service<Contact> {
 export class EncounterService extends Service<Encounter> {
   tableName = "encounters";
 
-  public fetchFor(contact: Contact): Promise<Encounter[]> {
+  public fetchFor(contact: Contact): Collection<Encounter, number> {
     return this.table
       .where("contactId")
       .equals(contact.id)
-      .toArray();
+      .reverse();
   }
 }
 
 export class PlanService extends Service<Plan> {
   tableName = "plans";
 
-  public fetchFor(contact: Contact): Promise<Plan[]> {
+  public fetchFor(contact: Contact): Collection<Plan, number> {
     return this.table
       .where("contactId")
       .equals(contact.id)
-      .toArray();
+      .reverse();
   }
 
-  public fetchFutureFor(contact: Contact): Promise<Plan[]> {
+  public fetchFutureFor(contact: Contact): Collection<Plan, number> {
     return this.table
       .where("contactId")
       .equals(contact.id)
       .filter(plan => {
         return plan._when > new Date();
       })
-      .toArray();
+      .reverse();
   }
 
   public fetchLastFor(contact: Contact): Promise<Plan> {
@@ -87,10 +87,10 @@ export class PlanService extends Service<Plan> {
       .first();
   }
 
-  public fetchAllForDate(date: Date): Promise<Plan[]> {
+  public fetchAllForDate(date: Date): Collection<Plan, number> {
     return this.table
       .where("when")
       .equals(zeroOutDate(date))
-      .toArray();
+      .reverse();
   }
 }
