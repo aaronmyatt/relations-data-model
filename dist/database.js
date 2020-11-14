@@ -37,6 +37,10 @@ export class Contact {
         const contact = new Contact(`test${lastContactId + 1}`, `testLast${lastContactId + 1}`, `test@test${lastContactId + 1}.com`, "123-123-123", new Date());
         db.contacts.add(contact);
     }
+    // TODO: implement this
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
 }
 export class Encounter {
     constructor(contactId, details, how, when, id) {

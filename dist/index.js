@@ -24,7 +24,7 @@ async function renderContacts() {
     const contacts = await contactService.fetchAll();
     contacts.forEach(contact => {
         const div = document.createElement("div");
-        div.innerText = `${contact.id} | ${contact.email}`;
+        div.innerText = `${contact.id} | ${contact.fullName}`;
         contactsDiv.appendChild(div);
     });
     return contacts;

@@ -61,6 +61,12 @@ export class PlanService extends Service {
         })
             .toArray();
     }
+    fetchLastFor(contact) {
+        return this.table
+            .where("contactId")
+            .equals(contact.id)
+            .first();
+    }
     fetchForDate(date) {
         return this.table
             .where("when")
