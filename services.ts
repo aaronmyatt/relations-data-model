@@ -73,6 +73,13 @@ export class PlanService extends Service<Plan> {
       .toArray();
   }
 
+  public fetchLastFor(contact: Contact): Promise<Plan> {
+    return this.table
+      .where("contactId")
+      .equals(contact.id)
+      .first();
+  }
+
   public fetchForDate(date: Date): Promise<Plan> {
     return this.table
       .where("when")
