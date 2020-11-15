@@ -1,9 +1,55 @@
-<h2>Contacts</h2>
-<h3>Add contacts:</h3>
-<div id="contacts"></div>
-<h2>Encounters</h2>
-<h3>Record encounters</h3>
-<div id="encounters"></div>
-<h2>Plans</h2>
-<h3>Make plans to get in touch again</h3>
-<div id="plans"></div>
+<html>
+  <head>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <h1>Relations</h1>
+    <nav x-data="{}">
+      <button @click="console.log('click')" class="p-1 border-2">
+        Add Contact
+      </button>
+    </nav>
+    <h2>Contacts</h2>
+    <div x-data="contactList()" x-init="loadContacts()" id="contacts">
+      <ul>
+        <template x-for="contact in contacts" :key="contact.id">
+          <li>
+            <div x-text="contact.fullName"></div>
+          </li>
+        </template>
+      </ul>
+    </div>
+    <h2>Encounters</h2>
+    <h3>Record encounters</h3>
+    <div id="encounters"></div>
+    <h2>Plans</h2>
+    <h3>Make plans to get in touch again</h3>
+    <div id="plans"></div>
+    <script>
+      function contactList() {
+        console.log("whut");
+        return {
+          contacts: [],
+          loadContacts() {
+            console.log("loading...");
+            const self = this;
+            window.services.contactService
+              .fetchAll()
+              .toArray()
+              .then(function(data) {
+                console.log(data);
+                self.contacts = data;
+              });
+          }
+        };
+      }
+    </script>
+  </body>
+</html>
