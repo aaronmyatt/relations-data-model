@@ -1,8 +1,6 @@
 import { Database, db, Contact, Encounter, Plan } from "./database";
-import { zeroOutDate } from "./utils";
+import { zeroOutDate, MS_PER_DAY } from "./utils";
 import { Collection } from "dexie";
-
-const MS_PER_DAY = 86400000;
 
 class Service<T> {
   connection: Database;
