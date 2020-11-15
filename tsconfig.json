@@ -3,6 +3,8 @@
     "target": "esnext",
     "moduleResolution": "node",
     "lib": ["dom", "ES2015"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": true,
+    "declarations": true
   }
 }

@@ -2,6 +2,8 @@ import { Database, db, Contact, Encounter, Plan } from "./database";
 import { zeroOutDate } from "./utils";
 import { Collection } from "dexie";
 
+const MS_PER_DAY = 86400000;
+
 class Service<T> {
   connection: Database;
   tableName: string;
@@ -92,5 +94,25 @@ export class PlanService extends Service<Plan> {
       .where("when")
       .equals(zeroOutDate(date))
       .reverse();
+  }
+
+  public async daysBetweenLastPlans(
+    contact: Contact
+  ): Promise<number | boolean> {
+    const numberOfPlans = await this.fetchFor(contact).count();
+
+    if (numberOfPlans > 1) {
+      const [latestPlan, previousPlan] = await this.fetchFor(contact)
+        .limit(2)
+        .toArray();
+      const daysBetweenPlans = Math.abs(
+        Math.round(
+          (latestPlan.when.valueOf() - previousPlan.when.valueOf()) / MS_PER_DAY
+        )
+      );
+      return Math.round(daysBetweenPlans / 2);
+    } else {
+      return false;
+    }
   }
 }
