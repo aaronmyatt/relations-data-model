@@ -59,7 +59,7 @@ export class Encounter {
     }
     static async generateMock(contact) {
         const encounter = new Encounter(contact.id, `something worth remembering happened between ${contact.firstName} and I`, "phone", new Date());
-        db.encounters.add(encounter);
+        return db.encounters.add(encounter);
     }
 }
 export class Plan {
@@ -83,7 +83,7 @@ export class Plan {
     // public makeNextPlan(contact: Contact, soonerOrLater: boolan){}
     static async generateMock(contact) {
         const plan = new Plan(contact.id, new Date(), true, false);
-        db.plans.add(plan);
+        return db.plans.add(plan);
     }
 }
 export var db = new Database();

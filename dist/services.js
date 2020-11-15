@@ -1,5 +1,5 @@
 import { db } from "./database";
-import { zeroOutDate } from "./utils";
+import { zeroOutDate, MS_PER_DAY } from "./utils";
 class Service {
     constructor(connection = db) {
         this.connection = connection;
@@ -77,5 +77,18 @@ export class PlanService extends Service {
             .where("when")
             .equals(zeroOutDate(date))
             .reverse();
+    }
+    async daysBetweenLastPlans(contact) {
+        const numberOfPlans = await this.fetchFor(contact).count();
+        if (numberOfPlans > 1) {
+            const [latestPlan, previousPlan] = await this.fetchFor(contact)
+                .limit(2)
+                .toArray();
+            const daysBetweenPlans = Math.abs(Math.round((latestPlan.when.valueOf() - previousPlan.when.valueOf()) / MS_PER_DAY));
+            return Math.round(daysBetweenPlans / 2);
+        }
+        else {
+            return false;
+        }
     }
 }

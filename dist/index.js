@@ -1,5 +1,20 @@
-// Import stylesheets
-import "./style.css";
+// import { database, services, models } from "./main";
+// declare global {
+//   interface Window {
+//     database: any;
+//   }
+//   interface Window {
+//     services: any;
+//   }
+//   interface Window {
+//     models: any;
+//   }
+// }
+// if (window) {
+//   window.database = database;
+//   window.services = services;
+//   window.models = models;
+// }
 import { db, Contact, Encounter, Plan } from "./database";
 import { ContactService, EncounterService, PlanService } from "./services";
 const contactService = new ContactService();
@@ -8,11 +23,9 @@ const planService = new PlanService();
 db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
     await Contact.generateMock();
     await Contact.generateMock();
-    const contact = await db.contacts.toCollection().first();
-    const contact2 = await db.contacts.toCollection().last();
-    await Encounter.generateMock(contact);
-    Encounter.generateMock(contact2);
-    Plan.generateMock(contact);
+    const contact = await contactService.fetchAll().first();
+    console.log(await Encounter.generateMock(contact));
+    await Plan.generateMock(contact);
 })
     .then(renderContacts)
     .then(renderEncounters)
@@ -34,6 +47,7 @@ async function renderEncounters(contacts) {
     contacts.forEach(async (contact) => {
         try {
             const encounters = await encounterService.fetchFor(contact).toArray();
+            console.log(encounters);
             encounters.forEach(encounter => {
                 const div = document.createElement("div");
                 div.innerText = `${encounter.contactId} | ${encounter.details}`;

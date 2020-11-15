@@ -5,6 +5,6 @@
     "lib": ["dom", "ES2015"],
     "outDir": "dist",
     "allowJs": true,
-    "declarations": true
+    "declaration": true
   }
 }
