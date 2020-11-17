@@ -74,8 +74,6 @@ function renderPlans(contacts: Contact[]) {
   contacts.forEach(async contact => {
     try {
       const plans = await planService.fetchFor(contact).toArray();
-      console.log(plans);
-
       plans.forEach(plan => {
         const div = document.createElement("div");
         div.innerText = `${plan.contactId} | ${plan.when}`;
