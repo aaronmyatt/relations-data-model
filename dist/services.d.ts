@@ -1,6 +1,6 @@
 import { Database, Contact, Encounter, Plan } from "./database";
 import { Collection } from "dexie";
-declare class Service<T> {
+export declare class Service<T> {
     connection: Database;
     tableName: string;
     constructor(connection?: Database);
@@ -26,4 +26,3 @@ export declare class PlanService extends Service<Plan> {
     fetchAllForDate(date: Date): Collection<Plan, number>;
     daysBetweenLastPlans(contact: Contact): Promise<number | boolean>;
 }
-export {};

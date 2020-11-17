@@ -1,6 +1,6 @@
 import { db } from "./database";
 import { zeroOutDate, MS_PER_DAY } from "./utils";
-class Service {
+export class Service {
     constructor(connection = db) {
         this.connection = connection;
     }

@@ -1,4 +1,5 @@
 import { Contact, Encounter, Plan } from "./database";
+import SettingService from "./settingService";
 import { ContactService, EncounterService, PlanService } from "./services";
 export declare const database: import("./database").Database;
 export declare const models: {
@@ -10,4 +11,5 @@ export declare const services: {
     contactService: ContactService;
     encounterService: EncounterService;
     planService: PlanService;
+    settingService: SettingService;
 };

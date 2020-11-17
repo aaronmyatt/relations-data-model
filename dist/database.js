@@ -7,11 +7,13 @@ export class Database extends Dexie {
         db.version(1).stores({
             contacts: "++id, firstName, lastName, email, telephone, birthday, location",
             encounters: "++id, contactId, details, how, when",
-            plans: "++id, contactId, when, sooner, later"
+            plans: "++id, contactId, when, sooner, later",
+            settings: "++id, name, value"
         });
         db.contacts.mapToClass(Contact);
         db.encounters.mapToClass(Encounter);
         db.plans.mapToClass(Plan);
+        db.settings.mapToClass(Settings);
     }
 }
 export class Contact {
@@ -84,6 +86,14 @@ export class Plan {
     static async generateMock(contact) {
         const plan = new Plan(contact.id, new Date(), true, false);
         return db.plans.add(plan);
+    }
+}
+export class Settings {
+    constructor(name, value, id) {
+        this.name = name;
+        this.value = value;
+        if (id)
+            this.id = id;
     }
 }
 export var db = new Database();

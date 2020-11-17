@@ -1,7 +1,6 @@
 import { Service } from "./services";
 import { Settings } from "./database";
 import { exportDB } from "dexie-export-import";
-import Dexie from "dexie";
 
 export default class SettingService extends Service<Settings> {
   constructor() {
@@ -12,7 +11,7 @@ export default class SettingService extends Service<Settings> {
       if (dbString) {
         const dbBlob = new Blob([dbString], { type: "application/json" });
         if (confirm("Import database?")) {
-          Dexie.import(dbBlob, {
+          this.connection.import(dbBlob, {
             clearTablesBeforeImport: true
           });
         }

@@ -3,6 +3,7 @@ export declare class Database extends Dexie {
     contacts: Dexie.Table<Contact, number>;
     encounters: Dexie.Table<Encounter, number>;
     plans: Dexie.Table<Plan, number>;
+    settings: Dexie.Table<Settings, number>;
     constructor();
 }
 export declare class Contact {
@@ -39,5 +40,11 @@ export declare class Plan {
     set when(date: Date);
     get when(): Date;
     static generateMock(contact: Contact): Promise<number>;
+}
+export declare class Settings {
+    id: number;
+    name: string;
+    value: any;
+    constructor(name: string, value: any, id?: number);
 }
 export declare var db: Database;
