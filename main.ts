@@ -1,5 +1,5 @@
 import { db, Contact, Encounter, Plan } from "./database";
-import { SettingService } from "./settingService";
+import SettingService from "./settingService";
 import { ContactService, EncounterService, PlanService } from "./services";
 
 export const database = db;

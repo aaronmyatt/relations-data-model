@@ -1,22 +1,22 @@
-// import { database, services, models } from "./main";
+import { database, services, models } from "./main";
 
-// declare global {
-//   interface Window {
-//     database: any;
-//   }
-//   interface Window {
-//     services: any;
-//   }
-//   interface Window {
-//     models: any;
-//   }
-// }
+declare global {
+  interface Window {
+    database: any;
+  }
+  interface Window {
+    services: any;
+  }
+  interface Window {
+    models: any;
+  }
+}
 
-// if (window) {
-//   window.database = database;
-//   window.services = services;
-//   window.models = models;
-// }
+if (window) {
+  window.database = database;
+  window.services = services;
+  window.models = models;
+}
 import { db, Contact, Encounter, Plan } from "./database";
 import { ContactService, EncounterService, PlanService } from "./services";
 import SettingService from "./settingService";
