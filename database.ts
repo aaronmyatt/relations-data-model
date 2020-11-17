@@ -5,6 +5,7 @@ export class Database extends Dexie {
   contacts: Dexie.Table<Contact, number>;
   encounters: Dexie.Table<Encounter, number>;
   plans: Dexie.Table<Plan, number>;
+  settings: Dexie.Table<Settings, number>;
 
   constructor() {
     super("relations");
@@ -13,12 +14,14 @@ export class Database extends Dexie {
       contacts:
         "++id, firstName, lastName, email, telephone, birthday, location",
       encounters: "++id, contactId, details, how, when",
-      plans: "++id, contactId, when, sooner, later"
+      plans: "++id, contactId, when, sooner, later",
+      settings: "++id, name, value"
     });
 
     db.contacts.mapToClass(Contact);
     db.encounters.mapToClass(Encounter);
     db.plans.mapToClass(Plan);
+    db.plans.mapToClass(Settings);
   }
 }
 
@@ -150,6 +153,18 @@ export class Plan {
   public static async generateMock(contact: Contact): Promise<number> {
     const plan = new Plan(contact.id, new Date(), true, false);
     return db.plans.add(plan);
+  }
+}
+
+export class Settings {
+  id: number;
+  name: string;
+  value: any;
+
+  constructor(name: string, value: any, id?: number) {
+    this.name = name;
+    this.value = value;
+    if (id) this.id = id;
   }
 }
 

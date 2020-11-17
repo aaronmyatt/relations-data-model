@@ -1,4 +1,4 @@
-import { Database, db, Contact, Encounter, Plan } from "./database";
+import { Database, db, Contact, Encounter, Plan, Settings } from "./database";
 import { zeroOutDate, MS_PER_DAY } from "./utils";
 import { Collection } from "dexie";
 
@@ -114,3 +114,5 @@ export class PlanService extends Service<Plan> {
     }
   }
 }
+
+export class SettingsService extends Service<Settings> {}
