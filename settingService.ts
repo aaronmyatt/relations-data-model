@@ -18,6 +18,7 @@ export default class SettingService extends Service<Settings> {
         }
       }
     }
+    this.initialiseSettings();
   }
 
   public async exportDB() {
@@ -28,5 +29,13 @@ export default class SettingService extends Service<Settings> {
 
   public async deleteDB() {
     await this.connection.delete();
+  }
+
+  public async initialiseSettings() {
+    this.table.bulkAdd([
+      new Settings("firstTimeLogin", false),
+      new Settings("minDaysBetweenPlans", 2),
+      new Settings("maxPlansPerDay", 2)
+    ]);
   }
 }
