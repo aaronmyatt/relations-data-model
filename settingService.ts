@@ -10,7 +10,7 @@ export default class SettingService extends Service<Settings> {
       const dbString = url.searchParams.get("json");
       if (dbString) {
         const dbJson = JSON.parse(dbString);
-        const dbBlob = new Blob(dbJson);
+        const dbBlob = new Blob([dbJson]);
 
         if (confirm("Import database?")) {
           importDB(dbBlob);
