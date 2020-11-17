@@ -2,7 +2,7 @@ import { Database, db, Contact, Encounter, Plan, Settings } from "./database";
 import { zeroOutDate, MS_PER_DAY } from "./utils";
 import { Collection } from "dexie";
 
-class Service<T> {
+export class Service<T> {
   connection: Database;
   tableName: string;
 
