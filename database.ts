@@ -21,7 +21,7 @@ export class Database extends Dexie {
     db.contacts.mapToClass(Contact);
     db.encounters.mapToClass(Encounter);
     db.plans.mapToClass(Plan);
-    db.plans.mapToClass(Settings);
+    db.settings.mapToClass(Settings);
   }
 }
 

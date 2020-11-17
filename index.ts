@@ -30,7 +30,7 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
 
   const contact = await contactService.fetchAll().first();
 
-  console.log(await Encounter.generateMock(contact));
+  await Encounter.generateMock(contact);
   await Plan.generateMock(contact);
 })
   .then(renderContacts)
@@ -56,7 +56,6 @@ async function renderEncounters(contacts: Contact[]) {
   contacts.forEach(async contact => {
     try {
       const encounters = await encounterService.fetchFor(contact).toArray();
-      console.log(encounters);
       encounters.forEach(encounter => {
         const div = document.createElement("div");
         div.innerText = `${encounter.contactId} | ${encounter.details}`;
@@ -75,6 +74,8 @@ function renderPlans(contacts: Contact[]) {
   contacts.forEach(async contact => {
     try {
       const plans = await planService.fetchFor(contact).toArray();
+      console.log(plans);
+
       plans.forEach(plan => {
         const div = document.createElement("div");
         div.innerText = `${plan.contactId} | ${plan.when}`;

@@ -1,4 +1,4 @@
 import { Service } from "./services";
 import { Settings } from "./database";
 
-export class SettingsService extends Service<Settings> {}
+export class SettingService extends Service<Settings> {}
