@@ -1,6 +1,6 @@
 import { Service } from "./services";
 import { Settings } from "./database";
-import { importDB, exportDB } from "dexie-export-import";
+import { exportDB } from "dexie-export-import";
 import Dexie from "dexie";
 
 export default class SettingService extends Service<Settings> {
@@ -24,5 +24,9 @@ export default class SettingService extends Service<Settings> {
     const blob = await exportDB(this.connection);
     const dbJson = await blob.text();
     return `${location.href}import?json=${dbJson}`;
+  }
+
+  public async deleteDB() {
+    await this.connection.delete();
   }
 }
