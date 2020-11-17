@@ -19,10 +19,12 @@
 // }
 import { db, Contact, Encounter, Plan } from "./database";
 import { ContactService, EncounterService, PlanService } from "./services";
+import SettingService from "./settingService";
 
 const contactService = new ContactService();
 const encounterService = new EncounterService();
 const planService = new PlanService();
+const settingService = new SettingService();
 
 db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   await Contact.generateMock();
@@ -36,6 +38,7 @@ db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
   .then(renderContacts)
   .then(renderEncounters)
   .then(renderPlans)
+  .then(renderSettings)
   .then(() => db.delete())
   .catch(e => console.log(e.message));
 
@@ -83,4 +86,9 @@ function renderPlans(contacts: Contact[]) {
       console.log(e.message);
     }
   });
+}
+
+async function renderSettings() {
+  const exportInput: HTMLElement = document.getElementById("dbexport");
+  exportInput.setAttribute("value", await settingService.exportDB());
 }
