@@ -38,7 +38,7 @@ export default class SettingService extends Service<Settings> {
 
   public async initialiseSettings() {
     this.table.bulkAdd([
-      new Settings("firstTimeLogin", false),
+      new Settings("firstTimeLogin", true),
       new Settings("minDaysBetweenPlans", 2),
       new Settings("maxPlansPerDay", 2)
     ]);
