@@ -3,6 +3,8 @@ import { Settings } from "./database";
 import { exportDB } from "dexie-export-import";
 
 export default class SettingService extends Service<Settings> {
+  tableName = "settings";
+  
   constructor() {
     super();
     if (location) {

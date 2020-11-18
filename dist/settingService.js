@@ -4,6 +4,7 @@ import { exportDB } from "dexie-export-import";
 export default class SettingService extends Service {
     constructor() {
         super();
+        this.tableName = "settings";
         if (location) {
             const url = new URL(location.href);
             const dbString = url.searchParams.get("json");
@@ -18,9 +19,12 @@ export default class SettingService extends Service {
         }
         this.initialiseSettings();
     }
-    async exportDB() {
+    async exportDBRaw() {
         const blob = await exportDB(this.connection);
-        const dbJson = await blob.text();
+        return await blob.text();
+    }
+    async exportDB() {
+        const dbJson = await this.exportDBRaw();
         return `${location.href}import?json=${dbJson}`;
     }
     async deleteDB() {
