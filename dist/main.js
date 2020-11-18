@@ -1,11 +1,12 @@
-import { db, Contact, Encounter, Plan } from "./database";
+import { db, Contact, Encounter, Plan, Settings } from "./database";
 import SettingService from "./settingService";
 import { ContactService, EncounterService, PlanService } from "./services";
 export const database = db;
 export const models = {
     Contact,
     Encounter,
-    Plan
+    Plan,
+    Settings
 };
 export const services = {
     contactService: new ContactService(),
