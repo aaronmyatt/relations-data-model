@@ -4,7 +4,7 @@ import { exportDB } from "dexie-export-import";
 
 export default class SettingService extends Service<Settings> {
   tableName = "settings";
-  
+
   constructor() {
     super();
     if (location) {
@@ -41,6 +41,6 @@ export default class SettingService extends Service<Settings> {
       new Settings("firstTimeLogin", false),
       new Settings("minDaysBetweenPlans", 2),
       new Settings("maxPlansPerDay", 2)
-    ]);
+    ], [1,2,3]);
   }
 }
