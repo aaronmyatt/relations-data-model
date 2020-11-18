@@ -70,4 +70,16 @@ function renderPlans(contacts) {
 async function renderSettings() {
     const exportInput = document.getElementById("dbexport");
     exportInput.setAttribute("value", await settingService.exportDB());
+    const settingsDiv = document.getElementById("settings");
+    try {
+        const settings = await settingService.fetchAll().toArray();
+        settings.forEach(setting => {
+            const div = document.createElement("div");
+            div.innerText = `${setting.name} | ${setting.value}`;
+            settingsDiv.appendChild(div);
+        });
+    }
+    catch (e) {
+        console.log(e.message);
+    }
 }
