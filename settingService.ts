@@ -41,6 +41,6 @@ export default class SettingService extends Service<Settings> {
       new Settings("firstTimeLogin", false),
       new Settings("minDaysBetweenPlans", 2),
       new Settings("maxPlansPerDay", 2)
-    ], [1,2,3]);
+    ]);
   }
 }
