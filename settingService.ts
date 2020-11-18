@@ -20,10 +20,14 @@ export default class SettingService extends Service<Settings> {
     this.initialiseSettings();
   }
 
-  public async exportDB() {
+  public async exportDBRaw() {
     const blob = await exportDB(this.connection);
-    const dbJson = await blob.text();
-    return `${location.href}/import?json=${dbJson}`;
+    return await blob.text();
+  }
+
+  public async exportDB() {
+    const dbJson = await this.exportDBRaw();
+    return `${location.href}import?json=${dbJson}`;
   }
 
   public async deleteDB() {
