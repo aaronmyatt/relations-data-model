@@ -15,7 +15,7 @@ export class Database extends Dexie {
         "++id, firstName, lastName, email, telephone, birthday, location",
       encounters: "++id, contactId, details, how, when",
       plans: "++id, contactId, when, sooner, later",
-      settings: "++id, name, value"
+      settings: "++id, &name, value"
     });
 
     db.contacts.mapToClass(Contact);
