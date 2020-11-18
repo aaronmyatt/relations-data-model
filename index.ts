@@ -91,4 +91,17 @@ function renderPlans(contacts: Contact[]) {
 async function renderSettings() {
   const exportInput: HTMLElement = document.getElementById("dbexport");
   exportInput.setAttribute("value", await settingService.exportDB());
+
+  const settingsDiv: HTMLElement = document.getElementById("settings");
+
+  try {
+    const settings = await settingService.fetchAll().toArray();
+    settings.forEach(setting => {
+      const div = document.createElement("div");
+      div.innerText = `${setting.name} | ${setting.value}`;
+      settingsDiv.appendChild(div);
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
 }
