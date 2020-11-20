@@ -25,7 +25,7 @@ export default class SettingService extends Service {
     }
     async exportDB() {
         const dbJson = await this.exportDBRaw();
-        return `${location.href}import?json=${dbJson}`;
+        return `${location.href}/import?json=${dbJson}`;
     }
     async deleteDB() {
         await this.connection.delete();
