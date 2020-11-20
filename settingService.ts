@@ -29,7 +29,7 @@ export default class SettingService extends Service<Settings> {
 
   public async exportDB() {
     const dbJson = await this.exportDBRaw();
-    return `${location.href}import?json=${dbJson}`;
+    return `${location.href}/import?json=${dbJson}`;
   }
 
   public async deleteDB() {
