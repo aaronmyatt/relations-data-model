@@ -28,6 +28,10 @@ export class Service<T> {
     return this.table.put(entity);
   }
 
+  public deleteOne(id: number): Promise<undefined> {
+    return this.table.delete(id);
+  }
+
   get table(): Dexie.Table<T, number> {
     return this.connection[this.tableName];
   }
