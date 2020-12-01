@@ -8,6 +8,7 @@ export declare class Service<T> {
     fetchAll(): Collection<T, number>;
     addOne(entity: T): Promise<number>;
     updateOne(entity: T): Promise<number>;
+    deleteOne(id: number): Promise<void>;
     get table(): Dexie.Table<T, number>;
 }
 export declare class ContactService extends Service<Contact> {

@@ -28,7 +28,7 @@ export class Service<T> {
     return this.table.put(entity);
   }
 
-  public deleteOne(id: number): Promise<undefined> {
+  public deleteOne(id: number): Promise<void> {
     return this.table.delete(id);
   }
 

@@ -18,6 +18,9 @@ export class Service {
     updateOne(entity) {
         return this.table.put(entity);
     }
+    deleteOne(id) {
+        return this.table.delete(id);
+    }
     get table() {
         return this.connection[this.tableName];
     }
