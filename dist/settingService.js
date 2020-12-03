@@ -34,7 +34,8 @@ export default class SettingService extends Service {
         this.table.bulkAdd([
             new Settings("firstTimeLogin", true),
             new Settings("minDaysBetweenPlans", 2),
-            new Settings("maxPlansPerDay", 2)
+            new Settings("maxPlansPerDay", 2),
+            new Settings("targetedDailyEncounters", 1)
         ]);
     }
 }

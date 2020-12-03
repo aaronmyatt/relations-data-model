@@ -66,6 +66,14 @@ function renderPlans(contacts) {
             console.log(e.message);
         }
     });
+    planService
+        .fetchAllForDate(new Date())
+        .toArray()
+        .then(plans => {
+        const span = document.createElement("span");
+        span.innerText = `|| Plan Count: ${plans.length}`;
+        plansDiv.append(span);
+    });
 }
 async function renderSettings() {
     const exportInput = document.getElementById("dbexport");

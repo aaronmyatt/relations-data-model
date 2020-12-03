@@ -76,9 +76,13 @@ export class PlanService extends Service {
             .first();
     }
     fetchAllForDate(date) {
+        date = zeroOutDate(date);
+        let nextDay = new Date();
+        nextDay.setDate(date.getDate() + 1);
         return this.table
-            .where("when")
-            .equals(zeroOutDate(date))
+            .filter(plan => {
+            return plan._when >= date && plan._when < nextDay;
+        })
             .reverse();
     }
     async daysBetweenLastPlans(contact) {
