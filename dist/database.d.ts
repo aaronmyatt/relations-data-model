@@ -12,10 +12,8 @@ export declare class Contact {
     lastName: string;
     email: string;
     telephone: string;
-    _birthday: Date;
+    birthday: Date;
     constructor(firstName: string, lastName: string, email: string, telephone: string, birthday?: Date, id?: number);
-    set birthday(birthday: Date);
-    get birthday(): Date;
     static generateMock(): Promise<void>;
     get fullName(): string;
 }
@@ -24,21 +22,17 @@ export declare class Encounter {
     contactId: number;
     details: string;
     how: string;
-    _when: Date;
+    when: Date;
     constructor(contactId: number, details: string, how: string, when: Date, id?: number);
-    set when(date: Date);
-    get when(): Date;
     static generateMock(contact: Contact): Promise<number>;
 }
 export declare class Plan {
     id: number;
     contactId: number;
-    _when: Date;
+    when: Date;
     sooner: boolean;
     later: boolean;
     constructor(contactId: number, when: Date, sooner: boolean, later: boolean, id?: number);
-    set when(date: Date);
-    get when(): Date;
     static generateMock(contact: Contact): Promise<number>;
 }
 export declare class Settings {

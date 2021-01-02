@@ -1,6 +1,6 @@
 {
   "name": "@aaronmyatt/relations-data-model",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "dependencies": {
     "dexie": "^3.0.2",
     "dexie-export-import": "^1.0.0-rc.2"

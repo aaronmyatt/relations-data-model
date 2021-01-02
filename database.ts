@@ -34,18 +34,18 @@ export class Database extends Dexie {
           db.plans,
           async () => {
             db.contacts.toCollection().modify(contact => {
-              contact.birthday = contact._birthday;
-              delete contact._birthday;
+              (contact as any).birthday = (contact as any)._birthday;
+              delete (contact as any)._birthday;
             });
 
             db.encounters.toCollection().modify(encounter => {
-              encounter.when = encounter._when;
-              delete encounter._when;
+              (encounter as any).when = (encounter as any)._when;
+              delete (encounter as any)._when;
             });
 
             db.plans.toCollection().modify(plan => {
-              plan.when = plan._when;
-              delete plan._when;
+              (plan as any).when = (plan as any)._when;
+              delete (plan as any)._when;
             });
           }
         );

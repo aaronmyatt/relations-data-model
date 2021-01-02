@@ -1,5 +1,4 @@
 import Dexie from "dexie";
-import { zeroOutDate } from "./utils";
 export class Database extends Dexie {
     constructor() {
         super("relations");
@@ -9,6 +8,29 @@ export class Database extends Dexie {
             encounters: "++id, contactId, details, how, when",
             plans: "++id, contactId, when, sooner, later",
             settings: "++id, &name, value"
+        });
+        db.version(2)
+            .stores({
+            contacts: "++id, firstName, lastName, email, telephone, birthday, location",
+            encounters: "++id, contactId, details, how, when",
+            plans: "++id, contactId, when, sooner, later",
+            settings: "++id, &name, value"
+        })
+            .upgrade(function (trans) {
+            return trans.db.transaction("rw", db.contacts, db.encounters, db.plans, async () => {
+                db.contacts.toCollection().modify(contact => {
+                    contact.birthday = contact._birthday;
+                    delete contact._birthday;
+                });
+                db.encounters.toCollection().modify(encounter => {
+                    encounter.when = encounter._when;
+                    delete encounter._when;
+                });
+                db.plans.toCollection().modify(plan => {
+                    plan.when = plan._when;
+                    delete plan._when;
+                });
+            });
         });
         db.contacts.mapToClass(Contact);
         db.encounters.mapToClass(Encounter);
@@ -27,19 +49,12 @@ export class Contact {
         if (id)
             this.id = id;
     }
-    set birthday(birthday) {
-        this._birthday = zeroOutDate(birthday);
-    }
-    get birthday() {
-        return this._birthday;
-    }
     static async generateMock() {
         const lastContact = await db.contacts.toCollection().last();
         const lastContactId = lastContact ? lastContact.id : 0;
         const contact = new Contact(`test${lastContactId + 1}`, `testLast${lastContactId + 1}`, `test@test${lastContactId + 1}.com`, "123-123-123", new Date());
         db.contacts.add(contact);
     }
-    // TODO: implement this
     get fullName() {
         return `${this.firstName} ${this.lastName}`;
     }
@@ -52,12 +67,6 @@ export class Encounter {
         this.when = when;
         if (id)
             this.id = id;
-    }
-    set when(date) {
-        this._when = zeroOutDate(date);
-    }
-    get when() {
-        return this._when;
     }
     static async generateMock(contact) {
         const encounter = new Encounter(contact.id, `something worth remembering happened between ${contact.firstName} and I`, "phone", new Date());
@@ -72,12 +81,6 @@ export class Plan {
         this.later = later;
         if (id)
             this.id = id;
-    }
-    set when(date) {
-        this._when = zeroOutDate(date);
-    }
-    get when() {
-        return this._when;
     }
     // TODO: make first plan for contact
     // public makePlan(){}
