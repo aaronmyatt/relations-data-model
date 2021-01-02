@@ -1,5 +1,4 @@
 import Dexie from "dexie";
-import { zeroOutDate } from "./utils";
 
 export class Database extends Dexie {
   contacts: Dexie.Table<Contact, number>;
@@ -10,6 +9,7 @@ export class Database extends Dexie {
   constructor() {
     super("relations");
     const db = this;
+
     db.version(1).stores({
       contacts:
         "++id, firstName, lastName, email, telephone, birthday, location",
@@ -17,6 +17,39 @@ export class Database extends Dexie {
       plans: "++id, contactId, when, sooner, later",
       settings: "++id, &name, value"
     });
+
+    db.version(2)
+      .stores({
+        contacts:
+          "++id, firstName, lastName, email, telephone, birthday, location",
+        encounters: "++id, contactId, details, how, when",
+        plans: "++id, contactId, when, sooner, later",
+        settings: "++id, &name, value"
+      })
+      .upgrade(function(trans) {
+        return trans.db.transaction(
+          "rw",
+          db.contacts,
+          db.encounters,
+          db.plans,
+          async () => {
+            db.contacts.toCollection().modify(contact => {
+              contact.birthday = contact._birthday;
+              delete contact._birthday;
+            });
+
+            db.encounters.toCollection().modify(encounter => {
+              encounter.when = encounter._when;
+              delete encounter._when;
+            });
+
+            db.plans.toCollection().modify(plan => {
+              plan.when = plan._when;
+              delete plan._when;
+            });
+          }
+        );
+      });
 
     db.contacts.mapToClass(Contact);
     db.encounters.mapToClass(Encounter);
@@ -31,7 +64,7 @@ export class Contact {
   lastName: string;
   email: string;
   telephone: string;
-  _birthday: Date;
+  birthday: Date;
 
   constructor(
     firstName: string,
@@ -49,14 +82,6 @@ export class Contact {
     if (id) this.id = id;
   }
 
-  set birthday(birthday: Date) {
-    this._birthday = zeroOutDate(birthday);
-  }
-
-  get birthday(): Date {
-    return this._birthday;
-  }
-
   public static async generateMock(): Promise<void> {
     const lastContact = await db.contacts.toCollection().last();
     const lastContactId = lastContact ? lastContact.id : 0;
@@ -70,7 +95,6 @@ export class Contact {
     db.contacts.add(contact);
   }
 
-  // TODO: implement this
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -81,7 +105,7 @@ export class Encounter {
   contactId: number;
   details: string;
   how: string;
-  _when: Date;
+  when: Date;
 
   constructor(
     contactId: number,
@@ -97,14 +121,6 @@ export class Encounter {
     if (id) this.id = id;
   }
 
-  set when(date: Date) {
-    this._when = zeroOutDate(date);
-  }
-
-  get when(): Date {
-    return this._when;
-  }
-
   public static async generateMock(contact: Contact): Promise<number> {
     const encounter = new Encounter(
       contact.id,
@@ -118,7 +134,7 @@ export class Encounter {
 export class Plan {
   id: number;
   contactId: number;
-  _when: Date;
+  when: Date;
   sooner: boolean;
   later: boolean;
 
@@ -134,14 +150,6 @@ export class Plan {
     this.sooner = sooner;
     this.later = later;
     if (id) this.id = id;
-  }
-
-  set when(date: Date) {
-    this._when = zeroOutDate(date);
-  }
-
-  get when(): Date {
-    return this._when;
   }
 
   // TODO: make first plan for contact

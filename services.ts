@@ -1,5 +1,5 @@
 import { Database, db, Contact, Encounter, Plan } from "./database";
-import { zeroOutDate, MS_PER_DAY } from "./utils";
+import { MS_PER_DAY } from "./utils";
 import { Collection } from "dexie";
 
 export class Service<T> {
@@ -72,7 +72,7 @@ export class PlanService extends Service<Plan> {
       .where("contactId")
       .equals(contact.id)
       .filter(plan => {
-        return plan._when > new Date();
+        return plan.when > new Date();
       })
       .reverse();
   }
@@ -85,20 +85,16 @@ export class PlanService extends Service<Plan> {
   }
 
   public fetchForDate(date: Date): Promise<Plan> {
-    return this.table
-      .where("when")
-      .equals(zeroOutDate(date))
-      .first();
+    return this.fetchAllForDate(date).first();
   }
 
   public fetchAllForDate(date: Date): Collection<Plan, number> {
-    date = zeroOutDate(date);
     let nextDay = new Date();
     nextDay.setDate(date.getDate() + 1);
 
     return this.table
       .filter(plan => {
-        return plan._when >= date && plan._when < nextDay;
+        return plan.when >= date && plan.when < nextDay;
       })
       .reverse();
   }
